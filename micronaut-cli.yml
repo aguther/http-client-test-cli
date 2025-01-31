@@ -1,0 +1,6 @@
+applicationType: cli
+defaultPackage: io.github.aguther.testing
+testFramework: junit
+sourceLanguage: java
+buildTool: maven
+features: [app-name, http-client, java, junit, logback, maven, maven-enforcer-plugin, picocli, picocli-java-application, picocli-junit, properties, readme, retry, serialization-jackson, shade]
