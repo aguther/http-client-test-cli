@@ -1,5 +1,6 @@
 package io.github.aguther.testing;
 
+import io.github.aguther.testing.jira.JiraApiClient;
 import io.micronaut.configuration.picocli.PicocliRunner;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
@@ -18,26 +19,32 @@ public class HttpClientTestCliCommand implements Runnable {
     PicocliRunner.run(HttpClientTestCliCommand.class, args);
   }
 
-  private final GithubLowLevelClient githubLowLevelClient;
-  private final GithubApiClient githubApiClient;
+  private final JiraApiClient jiraApiClient;
 
   @Inject
   public HttpClientTestCliCommand(
-      GithubLowLevelClient githubLowLevelClient,
-      GithubApiClient githubApiClient
+      JiraApiClient jiraApiClient
   ) {
-    this.githubLowLevelClient = githubLowLevelClient;
-    this.githubApiClient = githubApiClient;
+    this.jiraApiClient = jiraApiClient;
   }
 
   public void run() {
     logger.atInfo().log("HttpClientTestCliCommand starting");
 
-    var lowLevelReleases = githubLowLevelClient.fetchReleases();
-    var apiReleases = githubApiClient.fetchReleases();
+    try {
+      var resultGetIssue = jiraApiClient.getIssue("CPG-1");
+      if (resultGetIssue == null) {
+        logger.atError().log("Issue not found");
+      } else {
+        logger.atInfo().log("Issue: {}", resultGetIssue);
+      }
 
-    logger.atInfo().log("Fetching releases with low-level client: {}", githubLowLevelClient.fetchReleases().toString());
-    logger.atInfo().log("Fetching releases with api client: {}", githubApiClient.fetchReleases().toString());
+      var resultSearchIssue = jiraApiClient.searchIssue("summary~'Implementation'");
+      logger.atInfo().log("Issues found: {}", resultSearchIssue.total());
+
+    } catch (Exception e) {
+      logger.atError().log("Error while searching for issues", e);
+    }
 
     logger.atInfo().log("HttpClientTestCliCommand finished");
   }
