@@ -1,12 +1,12 @@
-package io.github.aguther.testing.jira;
+package io.github.aguther.testing.jira.api;
 
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
-public record JiraIssue(
+public record Issue(
     String id,
     String key,
-    JiraIssueFields fields
+    IssueFields fields
 ) {
 
 }

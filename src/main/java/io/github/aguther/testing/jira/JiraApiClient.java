@@ -4,6 +4,8 @@ import static io.micronaut.http.HttpHeaders.ACCEPT;
 import static io.micronaut.http.HttpHeaders.AUTHORIZATION;
 import static io.micronaut.http.HttpHeaders.USER_AGENT;
 
+import io.github.aguther.testing.jira.api.Issue;
+import io.github.aguther.testing.jira.api.SearchIssueResult;
 import io.micronaut.core.async.annotation.SingleResult;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Get;
@@ -22,12 +24,12 @@ public interface JiraApiClient {
 
   @Get("/rest/api/3/search")
   @SingleResult
-  JiraSearchIssueResult searchIssue(@QueryValue String jql);
+  SearchIssueResult searchIssue(@QueryValue String jql);
 
   @Get("/rest/api/3/issue/{issueIdOrKey}")
   @SingleResult
   @Retryable
-  JiraIssue getIssue(String issueIdOrKey);
+  Issue getIssue(String issueIdOrKey);
 
   @Get("/rest/api/3/issue/{issueIdOrKey}")
   @SingleResult
